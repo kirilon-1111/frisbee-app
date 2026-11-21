@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Правила фрисбі</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0E14;--g:#00E676;--b:#2979FF;--r:#FF5252;--tx:#EAF0F7;--mu:#8B97A8;
+--glass:rgba(255,255,255,.055);--line:rgba(255,255,255,.1);--sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:Manrope,system-ui,sans-serif;overscroll-behavior:none}
+body{background:radial-gradient(600px 380px at 85% -5%,rgba(41,121,255,.22),transparent 70%),radial-gradient(520px 340px at -10% 105%,rgba(0,230,118,.14),transparent 70%),var(--bg);background-attachment:fixed}
+h1,h2,.num{font-family:Unbounded,Manrope,sans-serif}
+#view{padding:calc(var(--st) + 18px) 16px calc(92px + var(--sb));max-width:560px;margin:0 auto;min-height:100%}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+h1{font-size:22px;font-weight:800;margin-bottom:4px}.sub{color:var(--mu);font-size:13px;margin-bottom:16px}
+.cat{display:block;width:100%;text-align:left;color:inherit;font:inherit;padding:14px;margin-bottom:10px;cursor:pointer;transition:transform .15s,border-color .2s}
+.cat:active{transform:scale(.98)}.cat.done{border-color:rgba(0,230,118,.5)}
+.row{display:flex;align-items:center;gap:12px}.idx{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font:800 13px Unbounded;background:rgba(41,121,255,.16);color:#8fb4ff;flex:none}
+.done .idx{background:rgba(0,230,118,.18);color:var(--g)}
+.cname{font-weight:700;font-size:14px;line-height:1.3;flex:1}.meta{font-size:12px;color:var(--mu);margin-top:10px;display:flex;justify-content:space-between}
+.done .meta .st{color:var(--g);font-weight:800}
+.bar{height:6px;background:rgba(255,255,255,.08);border-radius:9px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--b),var(--g));transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.tabbar{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:8px 10px calc(8px + var(--sb));background:rgba(11,14,20,.82);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);z-index:10}
+.tab{flex:1;max-width:180px;background:none;border:0;color:var(--mu);font:700 11px Manrope;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px;border-radius:14px;cursor:pointer;transition:color .2s}
+.tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab.on{color:var(--g)}
+.btn{width:100%;border:0;border-radius:14px;padding:15px;font:800 15px Manrope;cursor:pointer;color:#04140b;background:var(--g);transition:transform .12s,opacity .2s}
+.btn:active{transform:scale(.97)}.btn.sec{background:var(--glass);color:var(--tx);border:1px solid var(--line)}.btn.blue{background:var(--b);color:#fff}
+.center{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:20px}
+.center p{color:var(--mu);line-height:1.5;max-width:300px;font-size:14px}.lock{font-size:44px}
+.back{background:none;border:0;color:var(--mu);font:700 13px Manrope;cursor:pointer;padding:0 0 12px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 14px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;width:36px;height:36px;border-radius:11px;border:1px solid var(--line);background:var(--glass);color:var(--mu);font:800 13px Manrope;cursor:pointer}
+.chip.ans{color:var(--tx);border-color:rgba(41,121,255,.6)}.chip.cur{background:var(--b);color:#fff;border-color:var(--b)}
+.qtext{font-size:17px;font-weight:700;line-height:1.4;padding:18px;margin-bottom:12px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;color:inherit;font:600 14px/1.4 Manrope;padding:13px 14px;margin-bottom:9px;border-radius:14px;border:1px solid var(--line);background:var(--glass);cursor:pointer;transition:all .15s}
+.opt b{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:rgba(255,255,255,.08);font-size:12px;flex:none}
+.opt.sel{border-color:var(--b);background:rgba(41,121,255,.18)}.opt.sel b{background:var(--b);color:#fff}
+.nav{display:flex;gap:10px;margin-top:14px}.nav .btn{padding:13px}
+.ring{width:150px;height:150px;position:relative;margin:6px auto}.ring svg{transform:rotate(-90deg)}
+.ring span{position:absolute;inset:0;display:grid;place-items:center;font:800 30px Unbounded}
+.mist{padding:14px;margin-bottom:10px;text-align:left;font-size:13px;line-height:1.45}.mist .q{font-weight:700;margin-bottom:8px}
+.bad{color:#ff8a8a}.good{color:var(--g)}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:10px 0 18px}
+.pod{flex:1;text-align:center;padding:12px 6px;border-radius:16px 16px 6px 6px;border:1px solid var(--line);position:relative}
+.pod .m{font:800 20px Unbounded}.pod .n{font-size:12px;font-weight:700;margin:6px 0 2px;word-break:break-word}.pod .s{font-size:11px;color:var(--mu)}
+.p1{height:176px;background:linear-gradient(180deg,rgba(255,196,0,.28),rgba(255,196,0,.04));border-color:rgba(255,196,0,.55)}.p1 .m{color:#FFC400}
+.p2{height:140px;background:linear-gradient(180deg,rgba(200,210,225,.24),rgba(200,210,225,.03));border-color:rgba(200,210,225,.45)}.p2 .m{color:#C8D2E1}
+.p3{height:116px;background:linear-gradient(180deg,rgba(205,127,50,.28),rgba(205,127,50,.03));border-color:rgba(205,127,50,.5)}.p3 .m{color:#E09A58}
+.li{display:flex;align-items:center;gap:12px;padding:11px 14px;margin-bottom:8px;font-size:13px;font-weight:600}.li .r{width:26px;color:var(--mu);font-weight:800}.li .sc{margin-left:auto;font-weight:800;color:var(--g)}.li.me{border-color:var(--g)}
+.mecard{position:fixed;left:12px;right:12px;bottom:calc(72px + var(--sb));max-width:536px;margin:0 auto;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;border-color:rgba(0,230,118,.5);background:rgba(11,14,20,.85);z-index:9}
+.mecard b{color:var(--g);font:800 15px Unbounded}
+.prof{padding:22px;text-align:center;margin-bottom:12px}.ava{width:84px;height:84px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font:800 28px Unbounded;background:linear-gradient(135deg,var(--b),var(--g));color:#04140b;background-size:cover;background-position:center}
+.badge{display:inline-block;margin-top:10px;padding:8px 20px;border-radius:14px;font:800 30px Unbounded;color:var(--g);border:1px solid rgba(0,230,118,.5);background:rgba(0,230,118,.1);box-shadow:0 0 28px rgba(0,230,118,.22)}
+.toast{position:fixed;left:50%;top:calc(var(--st) + 14px);transform:translate(-50%,-90px);background:#1b2230;border:1px solid var(--line);padding:11px 18px;border-radius:14px;font-size:13px;font-weight:700;z-index:50;transition:transform .3s}
+.toast.on{transform:translate(-50%,0)}
+.spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--g);animation:sp 0.8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:40}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="view"></div>
+<nav class="tabbar" id="tabs" hidden>
+  <button class="tab on" data-t="cats"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Категорії</button>
+  <button class="tab" data-t="top"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/></svg>Глобальний топ</button>
+  <button class="tab" data-t="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Профіль</button>
+</nav>
+<div class="toast" id="toast"></div>
+<canvas id="cf"></canvas>
+<script>
+// ===== ЄДИНА КОНСТАНТА: адреса FastAPI (статичний домен ngrok), без слеша в кінці =====
+const API_BASE_URL = "https://YOUR-DOMAIN.ngrok-free.dev";
+// ======================================================================================
+const tg = window.Telegram.WebApp; tg.ready(); tg.expand();
+try { tg.setHeaderColor('#0B0E14'); tg.setBackgroundColor('#0B0E14'); } catch (e) {}
+const $ = s => document.querySelector(s), V = $('#view');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hap = (t='light') => { try { t==='ok'||t==='err'||t==='warn' ? tg.HapticFeedback.notificationOccurred({ok:'success',err:'error',warn:'warning'}[t]) : tg.HapticFeedback.impactOccurred(t); } catch (e) {} };
+const S = { me:null, tab:'cats', top:null, cat:null, qs:[], i:0, ans:{} };
+
+function toast(t){ const e=$('#toast'); e.textContent=t; e.classList.add('on'); setTimeout(()=>e.classList.remove('on'),2600); }
+async function api(path, opt={}) {
+  const r = await fetch(API_BASE_URL + path, { ...opt, headers: { 'Content-Type':'application/json', 'X-Init-Data': tg.initData, 'ngrok-skip-browser-warning':'true' } });
+  if (r.status === 429) { toast('Забагато запитів. Зачекай трохи.'); throw new Error('429'); }
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
+}
+const loading = () => V.innerHTML = '<div class="center"><div class="spin"></div></div>';
+const lockScreen = (t,p) => { $('#tabs').hidden = true; V.innerHTML = `<div class="center"><div class="lock">${t}</div><h1>Доступ обмежено</h1><p>${p}</p></div>`; };
+
+async function init() {
+  loading();
+  try { S.me = await api('/api/me'); }
+  catch (e) { return lockScreen('📡', 'Не вдалося з’єднатися із сервером. Спробуй відкрити застосунок ще раз трохи пізніше.'); }
+  if (S.me.status !== 'confirmed') return lockScreen('🔒', 'Очікуйте підтвердження вашої заявки тренером у боті.');
+  $('#tabs').hidden = false; show('cats');
+}
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => { hap(); show(b.dataset.t); });
+async function show(t) {
+  S.tab = t; document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  $('#tabs').hidden = false; window.scrollTo(0,0);
+  if (t === 'cats') { try { S.me = await api('/api/me'); } catch(e){} viewCats(); }
+  if (t === 'top') viewTop();
+  if (t === 'me') { try { S.me = await api('/api/me'); } catch(e){} viewMe(); }
+}
+function setBars(){ requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('.bar i').forEach(i=>i.style.width=i.dataset.w+'%'))); }
+
+function viewCats() {
+  V.innerHTML = `<h1>Категорії правил</h1><div class="sub">Зарахування від 85% правильних відповідей</div>` + S.me.categories.map(c => `
+    <button class="cat glass ${c.passed?'done':''}" data-id="${c.id}">
+      <div class="row"><div class="idx">${c.id}</div><div class="cname">${esc(c.name)}</div></div>
+      <div class="bar"><i data-w="${c.total?c.percent:0}"></i></div>
+      <div class="meta"><span class="st">${c.passed?'Пройдено ✓':c.total?c.percent+'%':'Немає питань'}</span><span>${c.total} пит.</span></div>
+    </button>`).join('');
+  V.querySelectorAll('.cat').forEach(b => b.onclick = () => { hap(); openCat(+b.dataset.id); });
+  setBars();
+}
+
+async function openCat(id) {
+  S.cat = S.me.categories.find(c => c.id === id); S.i = 0; S.ans = {}; $('#tabs').hidden = true; loading();
+  try { S.qs = (await api('/api/category/' + id)).questions; } catch(e) { toast('Помилка завантаження'); return show('cats'); }
+  viewQ();
+}
+function viewQ() {
+  const back = `<button class="back" id="bk">← Категорії</button>`;
+  if (!S.qs.length) {
+    V.innerHTML = back + `<div class="center"><div class="lock">🕒</div><h1>${esc(S.cat.name)}</h1><p>У цій категорії ще немає питань. Тренер скоро їх додасть!</p></div>`;
+    return $('#bk').onclick = () => show('cats');
+  }
+  const q = S.qs[S.i], L = 'ABCDEFGH';
+  V.innerHTML = back + `<div class="sub" style="margin-bottom:10px">${esc(S.cat.name)}</div>
+    <div class="chips">${S.qs.map((x,k)=>`<button class="chip ${S.ans[x.id]!==undefined?'ans':''} ${k===S.i?'cur':''}" data-k="${k}">${k+1}</button>`).join('')}</div>
+    <div class="qtext glass">${esc(q.text)}</div>
+    ${q.options.map((o,k)=>`<button class="opt ${S.ans[q.id]===k?'sel':''}" data-k="${k}"><b>${L[k]}</b><span>${esc(o)}</span></button>`).join('')}
+    <div class="nav">${S.i>0?'<button class="btn sec" id="pv">Назад</button>':''}${S.i<S.qs.length-1?'<button class="btn blue" id="nx">Далі</button>':''}</div>
+    <div class="nav"><button class="btn" id="fin">Завершити тест</button></div>`;
+  $('#bk').onclick = () => { hap(); show('cats'); };
+  V.querySelectorAll('.chip').forEach(c => c.onclick = () => { hap(); S.i = +c.dataset.k; viewQ(); });
+  V.querySelectorAll('.opt').forEach(o => o.onclick = () => { hap('medium'); S.ans[q.id] = +o.dataset.k; viewQ(); });
+  if ($('#pv')) $('#pv').onclick = () => { hap(); S.i--; viewQ(); };
+  if ($('#nx')) $('#nx').onclick = () => { hap(); S.i++; viewQ(); };
+  $('#fin').onclick = finish;
+}
+function finish() {
+  const left = S.qs.length - Object.keys(S.ans).length;
+  const go = ok => ok && submit();
+  if (left > 0) tg.showConfirm(`Без відповіді: ${left}. Вони будуть зараховані як неправильні. Завершити тест?`, go); else go(true);
+}
+async function submit() {
+  loading();
+  let r; try { r = await api(`/api/category/${S.cat.id}/submit`, { method:'POST', body: JSON.stringify({ answers: S.ans }) }); }
+  catch(e) { toast('Не вдалося зберегти результат'); return viewQ(); }
+  hap(r.passed ? 'ok' : 'warn');
+  const C = 2 * Math.PI * 62, col = r.passed ? 'var(--g)' : 'var(--b)', L = 'ABCDEFGH';
+  V.innerHTML = `<div class="center" style="min-height:auto;padding-top:10px"><h1>${r.passed?'Категорію пройдено!':'Ще трохи — і зарахуємо'}</h1>
+    <div class="ring"><svg width="150" height="150" viewBox="0 0 150 150"><circle cx="75" cy="75" r="62" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="10"/>
+    <circle id="rg" cx="75" cy="75" r="62" fill="none" stroke="${col}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" style="transition:stroke-dashoffset 1s ease"/></svg><span>${r.percent}%</span></div>
+    <p>Правильно: <b>${r.correct}</b> з <b>${r.total}</b>. ${r.passed?'Чудова робота!':'Для зарахування потрібно 85%. Переглянь помилки та спробуй ще раз.'}</p></div>
+    ${r.mistakes.length?'<h2 style="font-size:15px;margin:14px 0 10px">Розбір помилок</h2>':''}
+    ${r.mistakes.map(m=>`<div class="mist glass"><div class="q">${esc(m.text)}</div>
+      <div class="bad">Твоя відповідь: ${m.selected>=0?esc(L[m.selected]+'. '+m.options[m.selected]):'— без відповіді'}</div>
+      <div class="good">Правильно: ${esc(L[m.correct]+'. '+m.options[m.correct])}</div></div>`).join('')}
+    <div class="nav"><button class="btn sec" id="rt">Пройти ще раз</button><button class="btn" id="ok">До категорій</button></div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ $('#rg').style.strokeDashoffset = C * (1 - r.percent/100); }));
+  $('#ok').onclick = () => show('cats'); $('#rt').onclick = () => openCat(S.cat.id);
+  if (r.passed) confetti();
+}
+
+async function viewTop() {
+  loading();
+  let d; try { d = await api('/api/top'); } catch(e) { return V.innerHTML = '<div class="center"><p>Не вдалося завантажити топ.</p></div>'; }
+  const t = d.top, order = [[1,'p2'],[0,'p1'],[2,'p3']].filter(([i]) => t[i]);
+  V.innerHTML = `<h1>Глобальний топ</h1><div class="sub">За кількістю правильних відповідей</div>
+    <div class="podium">${order.map(([i,c])=>`<div class="pod ${c}"><div class="m">${i+1}</div><div class="n">${esc(t[i].name)}</div><div class="s">#${esc(t[i].number)}</div><div class="s"><b style="color:var(--tx)">${t[i].score}</b> відп.</div></div>`).join('')}</div>
+    ${t.slice(3).map((x,k)=>`<div class="li glass ${x.me?'me':''}"><span class="r">${k+4}</span>${esc(x.name)}<span class="sc">${x.score}</span></div>`).join('')}
+    ${d.me?`<div class="mecard glass"><span>Ваше місце: <b>#${d.me.rank}</b> серед ${d.total_players}</span><span>${d.me.score} відп.</span></div><div style="height:70px"></div>`:''}`;
+}
+
+function viewMe() {
+  const m = S.me, ini = m.name.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase(), pc = Math.round(m.passed * 100 / m.total);
+  V.innerHTML = `<div class="prof glass"><div class="ava" style="${m.photo?`background-image:url('${esc(m.photo)}')`:''}">${m.photo?'':esc(ini)}</div>
+    <h1 style="font-size:19px">${esc(m.name)}</h1><div class="badge">#${esc(m.number)}</div></div>
+    <div class="glass" style="padding:18px"><div class="row" style="justify-content:space-between"><b>Освоєння правил</b><b class="num" style="color:var(--g)">${pc}%</b></div>
+    <div class="bar" style="height:10px;margin-top:12px"><i data-w="${pc}"></i></div>
+    <div class="meta"><span>Пройдено категорій</span><span><b style="color:var(--tx)">${m.passed}</b> з ${m.total}</span></div></div>`;
+  setBars();
+}
+
+function confetti() {
+  const cv = $('#cf'), x = cv.getContext('2d'); cv.width = innerWidth; cv.height = innerHeight;
+  const cols = ['#00E676','#2979FF','#FFC400','#fff'], p = Array.from({length:90}, () => ({x:innerWidth/2, y:innerHeight*.35, vx:(Math.random()-.5)*14, vy:-Math.random()*13-3, s:Math.random()*6+3, c:cols[Math.random()*4|0], r:Math.random()*6}));
+  let f = 0; (function tick(){ x.clearRect(0,0,cv.width,cv.height); p.forEach(o => { o.vy += .35; o.x += o.vx; o.y += o.vy; o.r += .2; x.save(); x.translate(o.x,o.y); x.rotate(o.r); x.fillStyle = o.c; x.fillRect(-o.s/2,-o.s/2,o.s,o.s*.6); x.restore(); });
+    if (++f < 130) requestAnimationFrame(tick); else x.clearRect(0,0,cv.width,cv.height); })();
+}
+init();
+</script>
+</body>
+</html>
