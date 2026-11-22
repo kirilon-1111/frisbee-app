@@ -46,6 +46,7 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.3px}.sub{color:var(--mu);font
 .cat:active{transform:scale(.975)}.cat.done::before{background:linear-gradient(150deg,rgba(0,230,118,.7),rgba(0,230,118,.1) 50%,rgba(0,230,118,.5))}
 .row{display:flex;align-items:center;gap:13px}
 .idx{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font:800 13px Unbounded;flex:none;color:#cfe0ff;background:linear-gradient(135deg,rgba(41,121,255,.35),rgba(41,121,255,.08));border:1px solid rgba(41,121,255,.35)}
+.idx svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .done .idx{color:var(--g);background:linear-gradient(135deg,rgba(0,230,118,.32),rgba(0,230,118,.06));border-color:rgba(0,230,118,.4);box-shadow:0 0 18px rgba(0,230,118,.2)}
 .cm{flex:1;min-width:0}.cname{font-weight:700;font-size:14px;line-height:1.3}
 .cs{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:11.5px;color:var(--mu)}
@@ -55,9 +56,9 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.3px}.sub{color:var(--mu);font
 .bar{height:6px;background:rgba(255,255,255,.07);border-radius:9px;overflow:hidden;margin-top:13px}
 .bar i{display:block;height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--b),var(--g));box-shadow:0 0 12px rgba(0,230,118,.5);transition:width 1s var(--ease)}
 /* таб-бар */
-.tabbar{position:fixed;left:14px;right:14px;bottom:calc(12px + var(--sb));max-width:520px;margin:0 auto;display:flex;gap:4px;padding:6px;z-index:10;border-radius:26px;
+.tabbar{position:fixed;left:14px;right:14px;bottom:calc(12px + var(--sb));max-width:520px;margin:0 auto;display:flex;gap:2px;padding:6px;z-index:10;border-radius:26px;
 background:rgba(16,20,29,.78);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.5)}
-.tab{flex:1;background:none;border:0;color:var(--mu);font:700 10.5px Manrope;display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 4px;border-radius:20px;cursor:pointer;transition:all .3s var(--ease)}
+.tab{flex:1;min-width:0;background:none;border:0;color:var(--mu);font:700 10px/1.15 Manrope;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:9px 2px;border-radius:20px;cursor:pointer;transition:all .3s var(--ease)}
 .tab svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tab.on{color:var(--g);background:linear-gradient(180deg,rgba(0,230,118,.16),rgba(0,230,118,.05));box-shadow:inset 0 0 0 1px rgba(0,230,118,.25),0 0 22px rgba(0,230,118,.12)}
 /* кнопки */
@@ -70,7 +71,9 @@ background:rgba(16,20,29,.78);backdrop-filter:blur(24px) saturate(150%);-webkit-
 /* экраны */
 .center{min-height:62vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:20px}
 .center p{color:var(--mu);line-height:1.55;max-width:300px;font-size:14px}
-.ico{width:78px;height:78px;border-radius:26px;display:grid;place-items:center;font-size:34px;background:linear-gradient(135deg,rgba(41,121,255,.25),rgba(0,230,118,.12));border:1px solid var(--line);box-shadow:0 0 40px rgba(41,121,255,.25)}
+.center small{color:var(--mu);opacity:.7;font-size:11.5px;line-height:1.5;max-width:300px}
+.ico{width:78px;height:78px;border-radius:26px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(41,121,255,.25),rgba(0,230,118,.12));border:1px solid var(--line);box-shadow:0 0 40px rgba(41,121,255,.25)}
+.ico svg{width:36px;height:36px;stroke:url(#gg);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .skel{height:84px;border-radius:22px;margin-bottom:11px;background:linear-gradient(100deg,rgba(255,255,255,.04) 30%,rgba(255,255,255,.09) 50%,rgba(255,255,255,.04) 70%);background-size:300% 100%;animation:sk 1.4s linear infinite}
 @keyframes sk{to{background-position:-300% 0}}
 /* тест */
@@ -82,17 +85,33 @@ background:rgba(16,20,29,.78);backdrop-filter:blur(24px) saturate(150%);-webkit-
 .chip{flex:none;width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--mu);font:800 13px Manrope;cursor:pointer;transition:all .2s}
 .chip.ans{color:var(--tx);border-color:rgba(41,121,255,.6);background:rgba(41,121,255,.14)}.chip.cur{background:linear-gradient(135deg,#4B8DFF,#2260F0);color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(41,121,255,.4)}
 .qtext{font-size:18px;font-weight:800;line-height:1.42;padding:22px 20px;margin-bottom:14px;letter-spacing:-.2px}
+.qtag{font:700 10px Manrope;letter-spacing:.14em;text-transform:uppercase;color:var(--g);margin-bottom:8px}
+.imgw{overflow:hidden;border-radius:16px;background:rgba(0,0,0,.28)}
+.imgw img{display:block;width:100%;max-height:42vh;object-fit:contain;transition:opacity .35s}
+.imgw.ld{min-height:190px;background:linear-gradient(100deg,rgba(255,255,255,.04) 30%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.04) 70%);background-size:300% 100%;animation:sk 1.4s linear infinite}
+.imgw.ld img{opacity:0}
+.qimg{padding:8px;margin-bottom:14px}
 .opt{display:flex;gap:13px;align-items:center;width:100%;text-align:left;color:inherit;font:600 14.5px/1.4 Manrope;padding:14px;margin-bottom:10px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.04);cursor:pointer;transition:all .2s var(--ease)}
 .opt:active{transform:scale(.98)}
 .opt b{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.08);font-size:12.5px;flex:none;transition:all .2s}
 .opt.sel{border-color:rgba(75,141,255,.9);background:linear-gradient(135deg,rgba(41,121,255,.28),rgba(41,121,255,.08));box-shadow:0 0 0 3px rgba(41,121,255,.12),0 10px 22px rgba(41,121,255,.18)}
 .opt.sel b{background:linear-gradient(135deg,#4B8DFF,#2260F0);color:#fff}
 .prog{height:4px;border-radius:9px;background:rgba(255,255,255,.07);overflow:hidden;margin-bottom:14px}.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--b),var(--g));transition:width .5s var(--ease)}
+/* вибір кількості (всі питання) */
+.picks{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
+.pick{height:48px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--tx);font:800 15px Unbounded;cursor:pointer;transition:all .2s}
+.pick:disabled{opacity:.3;cursor:default}
+.pick.on{background:linear-gradient(135deg,#4B8DFF,#2260F0);border-color:transparent;box-shadow:0 8px 20px rgba(41,121,255,.4)}
+.custom{display:flex;align-items:center;gap:12px;padding:14px 16px;margin-bottom:6px}
+.custom span{flex:1;font-weight:700;font-size:13.5px;line-height:1.3}.custom small{display:block;color:var(--mu);font-weight:600;font-size:11.5px;margin-top:2px}
+.inp{width:96px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:12px;color:var(--tx);font:800 17px Unbounded;text-align:center;outline:0;transition:border-color .2s}
+.inp:focus{border-color:rgba(75,141,255,.9)}
 /* результат */
 .res{text-align:center;padding:26px 18px 20px;margin-bottom:16px}.res h1{font-size:20px;margin:14px 0 6px}.res p{color:var(--mu);font-size:13.5px;line-height:1.5}
 .res .ring{margin:0 auto}.res .ring span{font-size:30px}
 .stats{display:flex;gap:8px;margin-top:16px}.stat{flex:1;padding:11px 6px;border-radius:14px;background:rgba(255,255,255,.05);font-size:11px;color:var(--mu)}.stat b{display:block;font:800 17px Unbounded;color:var(--tx);margin-bottom:3px}
 .mist{padding:15px;margin-bottom:10px;font-size:13.5px;line-height:1.5}.mist .q{font-weight:700;margin-bottom:9px}.bad{color:#ff8e8e;font-size:12.5px}
+.mist .imgw{margin-bottom:10px}.mist .imgw img{max-height:200px}
 .h2{font:800 14px Unbounded;margin:18px 0 12px}
 /* топ */
 .podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:22px 0 20px}
@@ -126,32 +145,55 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:40}
   <button class="tab on" data-t="cats"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>Категорії</button>
   <button class="tab" data-t="top"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/></svg>Глобальний топ</button>
   <button class="tab" data-t="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Профіль</button>
+  <button class="tab" data-t="mix"><svg viewBox="0 0 24 24"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="M18 2l4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="M18 14l4 4-4 4"/></svg>Всі питання</button>
 </nav>
 <div class="toast" id="toast"></div>
 <canvas id="cf"></canvas>
 <script>
 // ===== ЄДИНА КОНСТАНТА: адреса FastAPI (публічний HTTPS-домен), без слеша в кінці =====
-const API_BASE_URL = "af8116e4.app.rubyhost.ru";
+const API_BASE_URL = "https://af8116e4.app.rubyhost.ru";
 // ======================================================================================
 const tg = window.Telegram.WebApp; tg.ready(); tg.expand();
 try { tg.setHeaderColor('#0B0E14'); tg.setBackgroundColor('#0B0E14'); } catch (e) {}
 const $ = s => document.querySelector(s), V = $('#view');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const hap = (t='light') => { try { ['ok','err','warn'].includes(t) ? tg.HapticFeedback.notificationOccurred({ok:'success',err:'error',warn:'warning'}[t]) : tg.HapticFeedback.impactOccurred(t); } catch (e) {} };
-const S = { me:null, tab:'cats', cat:null, qs:[], i:0, ans:{} };
-const LV = [[17,'Легенда WFDF'],[12,'Майстер правил'],[7,'Знавець'],[3,'Гравець'],[0,'Новачок']];
+const S = { me:null, tab:'cats', cat:null, qs:[], i:0, ans:{}, mode:'cat', mixN:10, mixIds:[] };
+const LV = [[18,'Легенда WFDF'],[12,'Майстер правил'],[7,'Знавець'],[3,'Гравець'],[0,'Новачок']];
 const level = n => LV.find(([k]) => n >= k)[1];
 const firstName = n => { const p = n.split(' '); return p[1] || p[0]; };
 const ini = n => n.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
 const CHEV = '<svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
 const BACK = '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>';
+const IC = {
+  wifi: '<svg viewBox="0 0 24 24"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1"/><path d="M3 3l18 18"/></svg>',
+  lock: '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  clock: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  img: '<svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-4.5 4 3.5 3-2.5 4 3.5"/></svg>',
+  shuffle: '<svg viewBox="0 0 24 24"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="M18 2l4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="M18 14l4 4-4 4"/></svg>'
+};
 
 function toast(t){ const e=$('#toast'); e.textContent=t; e.classList.add('on'); setTimeout(()=>e.classList.remove('on'),2600); }
 async function api(path, opt={}) {
-  const r = await fetch(API_BASE_URL + path, { ...opt, headers: { 'Content-Type':'application/json', 'X-Init-Data': tg.initData, 'ngrok-skip-browser-warning':'true' } });
+  const r = await fetch(API_BASE_URL + path, { ...opt, headers: { 'Content-Type':'application/json', 'X-Init-Data': tg.initData } });
   if (r.status === 429) { toast('Забагато запитів. Зачекай трохи.'); throw new Error('429'); }
   if (!r.ok) throw new Error(r.status);
   return r.json();
+}
+// картинки: запит із підписом Telegram → blob-URL (кеш у пам'яті)
+const IMG = {};
+async function loadImg(id) {
+  if (IMG[id]) return IMG[id];
+  const r = await fetch(API_BASE_URL + '/api/qimg/' + id, { headers: { 'X-Init-Data': tg.initData } });
+  if (!r.ok) throw new Error(r.status);
+  return IMG[id] = URL.createObjectURL(await r.blob());
+}
+const imgBox = (id, cls='') => `<div class="imgw ${cls} ${IMG[id]?'':'ld'}" data-img="${id}"><img alt="" ${IMG[id]?`src="${IMG[id]}"`:''}></div>`;
+function hydrate() {
+  V.querySelectorAll('.imgw.ld[data-img]').forEach(async w => {
+    try { const u = await loadImg(w.dataset.img), im = w.querySelector('img'); im.onload = () => w.classList.remove('ld'); im.src = u; }
+    catch (e) { w.classList.remove('ld'); w.innerHTML = '<div class="bad" style="padding:34px 10px;text-align:center">Не вдалося завантажити зображення</div>'; }
+  });
 }
 function paint(html, anim=true) { V.classList.remove('in'); V.innerHTML = html; void V.offsetWidth; if (anim) { V.classList.add('in'); window.scrollTo(0,0); }
   requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -160,22 +202,30 @@ function paint(html, anim=true) { V.classList.remove('in'); V.innerHTML = html; 
     V.querySelectorAll('.rg').forEach(el => { const C = parseFloat(el.getAttribute('stroke-dasharray')); el.style.strokeDashoffset = C * (1 - el.dataset.p / 100); });
   })); }
 const skeleton = () => paint('<div class="skel"></div>'.repeat(5));
-const lockScreen = (e,t,p) => { $('#tabs').hidden = true; paint(`<div class="center"><div class="ico">${e}</div><h1>${t}</h1><p>${p}</p></div>`); };
+const lockScreen = (e,t,p,small='') => { $('#tabs').hidden = true; paint(`<div class="center"><div class="ico">${e}</div><h1>${t}</h1><p>${p}</p>${small?`<small>${small}</small>`:''}</div>`); };
 function ring(p, sz=96, sw=9) { const r=(sz-sw)/2, C=2*Math.PI*r, c=sz/2;
   return `<div class="ring" style="width:${sz}px;height:${sz}px"><svg width="${sz}" height="${sz}"><circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="${sw}"/>
   <circle class="rg" data-p="${p}" cx="${c}" cy="${c}" r="${r}" fill="none" stroke="url(#gg)" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" transform="rotate(-90 ${c} ${c})"/></svg><span>${p}%</span></div>`; }
 
+function errHint(e) {
+  const m = String(e && e.message || e);
+  if (m === '401') return 'Помилка 401: Telegram-підпис не пройшов. Закрий застосунок і відкрий його заново з бота (кнопка «Натисни»). Якщо не допомагає — перевір BOT_TOKEN у main.py.';
+  if (m === '403') return 'Помилка 403: доступ обмежено.';
+  if (/^\d+$/.test(m)) return `Помилка сервера ${m}. Перевір, що main.py запущений, а домен веде саме на API_PORT.`;
+  return 'Сервер не відповідає (мережа / CORS). Перевір, що main.py запущений, домен веде на API_PORT, а CORS_ORIGINS містить домен GitHub Pages.';
+}
 async function init() {
   skeleton();
   try { S.me = await api('/api/me'); }
-  catch (e) { return lockScreen('📡', 'Немає зв’язку', 'Не вдалося з’єднатися із сервером. Спробуй відкрити застосунок ще раз трохи пізніше.'); }
-  if (S.me.status !== 'confirmed') return lockScreen('🔒', 'Доступ обмежено', 'Очікуйте підтвердження вашої заявки тренером у боті.');
+  catch (e) { return lockScreen(IC.wifi, 'Немає зв’язку', 'Не вдалося з’єднатися із сервером. Спробуй відкрити застосунок ще раз трохи пізніше.', esc(errHint(e))); }
+  if (S.me.status !== 'confirmed') return lockScreen(IC.lock, 'Доступ обмежено', 'Очікуйте підтвердження вашої заявки тренером у боті.');
   show('cats');
 }
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => { if (b.dataset.t !== S.tab) hap(); show(b.dataset.t); });
 async function show(t) {
   S.tab = t; $('#tabs').hidden = false; document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.t === t));
   if (t === 'top') return viewTop();
+  if (t === 'mix') return viewMix();
   if (t === 'cats' || t === 'me') { try { S.me = await api('/api/me'); } catch(e){} }
   t === 'cats' ? viewCats() : viewMe();
 }
@@ -186,33 +236,65 @@ function viewCats() {
     <h1>${m.passed} з ${m.total} категорій</h1><p>Проходь тести та вивчай правила WFDF</p><span class="lvl">★ ${level(m.passed)}</span></div></div>
     <h2 class="h2" style="margin-top:4px">Категорії правил</h2>` + m.categories.map((c,k) => `
     <button class="cat glass ${c.passed?'done':''}" style="--d:${60+k*35}ms" data-id="${c.id}">
-      <div class="row"><div class="idx">${c.id}</div><div class="cm"><div class="cname">${esc(c.name)}</div>
+      <div class="row"><div class="idx">${c.img?IC.img:c.id}</div><div class="cm"><div class="cname">${esc(c.name)}</div>
         <div class="cs">${c.passed?'<em class="pill ok">Пройдено ✓</em>':c.total?`<em class="pill b">${c.percent}%</em>`:'<em class="pill n">Скоро</em>'}<span>${c.total} пит.</span></div></div>${CHEV}</div>
       <div class="bar"><i data-w="${c.total?c.percent:0}"></i></div></button>`).join(''));
   V.querySelectorAll('.cat').forEach(b => b.onclick = () => { hap(); openCat(+b.dataset.id); });
 }
 
 async function openCat(id) {
-  S.lastQ = null;
+  S.lastQ = null; S.mode = 'cat';
   S.cat = S.me.categories.find(c => c.id === id); S.i = 0; S.ans = {}; $('#tabs').hidden = true; skeleton();
   try { S.qs = (await api('/api/category/' + id)).questions; } catch(e) { toast('Помилка завантаження'); return show('cats'); }
   viewQ();
 }
+
+// ===== Всі питання: випадкові питання з усіх категорій =====
+async function viewMix() {
+  skeleton();
+  let a; try { a = (await api('/api/mix')).available; } catch(e) { return paint('<div class="center"><p>Не вдалося завантажити.</p></div>'); }
+  if (!a) return paint(`<div class="center"><div class="ico">${IC.clock}</div><h1>Питань ще немає</h1><p>Тренер скоро додасть питання.</p></div>`);
+  S.mixN = Math.max(1, Math.min(S.mixN || 10, a));
+  const opts = [5,10,15,20,25];
+  paint(`<div class="ov">Тренування</div><h1>Всі питання</h1><div class="sub">Випадкові питання з усіх категорій, разом із картинками. Прогрес категорій і топ не змінюються.</div>
+    <div class="glass" style="padding:18px;margin-bottom:16px"><div class="row" style="justify-content:space-between"><b>Доступно питань</b><b class="num" style="color:var(--g);font-size:20px">${a}</b></div></div>
+    <h2 class="h2" style="margin-top:4px">Скільки питань?</h2>
+    <div class="picks">${opts.map(n=>`<button class="pick ${S.mixN===n?'on':''}" data-n="${n}" ${n>a?'disabled':''}>${n}</button>`).join('')}</div>
+    <div class="custom glass"><span>Своя кількість<small>від 1 до ${a}</small></span><input class="inp" id="mn" type="number" inputmode="numeric" min="1" max="${a}" value="${S.mixN}"></div>
+    <div class="nav"><button class="btn" id="go">Почати</button></div>`);
+  const inp = $('#mn'), sync = () => { V.querySelectorAll('.pick').forEach(p => p.classList.toggle('on', +p.dataset.n === S.mixN)); $('#go').textContent = `Почати · ${S.mixN} пит.`; };
+  sync();
+  V.querySelectorAll('.pick').forEach(p => p.onclick = () => { hap(); S.mixN = +p.dataset.n; inp.value = S.mixN; sync(); });
+  inp.oninput = () => { const v = parseInt(inp.value); if (v >= 1) { S.mixN = Math.min(v, a); if (v > a) inp.value = a; sync(); } };
+  inp.onblur = () => { inp.value = S.mixN; };
+  $('#go').onclick = () => { hap('medium'); openMix(S.mixN); };
+}
+async function openMix(n) {
+  S.mode = 'mix'; S.cat = { id:'mix', name:'Всі питання' }; S.i = 0; S.ans = {}; S.lastQ = null; $('#tabs').hidden = true; skeleton();
+  try { const d = await api('/api/mix?n=' + n); S.qs = d.questions; S.mixIds = S.qs.map(q => q.id); }
+  catch(e) { toast('Помилка завантаження'); return show('mix'); }
+  viewQ();
+}
+
 function viewQ() {
+  const back = () => show(S.mode === 'mix' ? 'mix' : 'cats');
   const head = `<div class="top"><button class="bk" id="bk">${BACK}</button><div class="tt">${esc(S.cat.name)}</div>${S.qs.length?`<div class="tk">${S.i+1}/${S.qs.length}</div>`:''}</div>`;
   if (!S.qs.length) {
-    paint(head + `<div class="center"><div class="ico">🕒</div><h1>Питань ще немає</h1><p>У цій категорії ще немає питань. Тренер скоро їх додасть!</p></div>`);
-    return $('#bk').onclick = () => show('cats');
+    paint(head + `<div class="center"><div class="ico">${IC.clock}</div><h1>Питань ще немає</h1><p>У цій категорії ще немає питань. Тренер скоро їх додасть!</p></div>`);
+    return $('#bk').onclick = back;
   }
   const q = S.qs[S.i], L = 'ABCDEFGH', done = Object.keys(S.ans).length;
   const key = S.cat.id + ':' + S.i, anim = S.lastQ !== key; S.lastQ = key;
   paint(head + `<div class="prog"><i data-w="${Math.round(done*100/S.qs.length)}"></i></div>
     <div class="chips">${S.qs.map((x,k)=>`<button class="chip ${S.ans[x.id]!==undefined?'ans':''} ${k===S.i?'cur':''}" data-k="${k}">${k+1}</button>`).join('')}</div>
-    <div class="qtext glass" style="--d:0ms">${esc(q.text)}</div>
+    ${q.img?`<div class="qimg glass" style="--d:0ms">${imgBox(q.id)}</div>`:''}
+    <div class="qtext glass" style="--d:0ms">${S.mode==='mix'&&q.cat?`<div class="qtag">${esc(q.cat)}</div>`:''}${esc(q.text)}</div>
     ${q.options.map((o,k)=>`<button class="opt ${S.ans[q.id]===k?'sel':''}" style="--d:${60+k*45}ms" data-k="${k}"><b>${L[k]}</b><span>${esc(o)}</span></button>`).join('')}
     <div class="nav">${S.i>0?'<button class="btn sec" id="pv">Назад</button>':''}${S.i<S.qs.length-1?'<button class="btn blue" id="nx">Далі</button>':''}</div>
     <div class="nav"><button class="btn" id="fin">Завершити тест</button></div>`, anim);
-  $('#bk').onclick = () => { hap(); show('cats'); };
+  hydrate();
+  const nx = S.qs[S.i+1]; if (nx && nx.img) loadImg(nx.id).catch(()=>{});
+  $('#bk').onclick = () => { hap(); back(); };
   V.querySelectorAll('.chip').forEach(c => c.onclick = () => { hap(); S.i = +c.dataset.k; viewQ(); });
   V.querySelectorAll('.opt').forEach(o => o.onclick = () => { hap('medium'); S.ans[q.id] = +o.dataset.k; viewQ(); });
   if ($('#pv')) $('#pv').onclick = () => { hap(); S.i--; viewQ(); };
@@ -225,19 +307,22 @@ function finish() {
   if (left > 0) tg.showConfirm(`Без відповіді: ${left}. Вони будуть зараховані як неправильні. Завершити тест?`, go); else go(true);
 }
 async function submit() {
-  skeleton();
-  let r; try { r = await api(`/api/category/${S.cat.id}/submit`, { method:'POST', body: JSON.stringify({ answers: S.ans }) }); }
+  skeleton(); const mix = S.mode === 'mix';
+  let r; try { r = mix ? await api('/api/mix/submit', { method:'POST', body: JSON.stringify({ ids: S.mixIds, answers: S.ans }) })
+                       : await api(`/api/category/${S.cat.id}/submit`, { method:'POST', body: JSON.stringify({ answers: S.ans }) }); }
   catch(e) { toast('Не вдалося зберегти результат'); return viewQ(); }
   hap(r.passed ? 'ok' : 'warn'); const L = 'ABCDEFGH';
+  const title = mix ? (r.passed ? 'Чудовий результат!' : 'Є над чим попрацювати') : (r.passed ? 'Категорію пройдено!' : 'Ще трохи — і зарахуємо');
+  const text = mix ? 'Це тренування: прогрес категорій і топ не змінились.' : (r.passed ? 'Чудова робота, так тримати!' : 'Для зарахування потрібно 85%. Повтори матеріал і спробуй ще раз.');
   paint(`<div class="res glass">${ring(r.percent, 150, 12)}
-    <h1>${r.passed?'Категорію пройдено! 🎉':'Ще трохи — і зарахуємо'}</h1>
-    <p>${r.passed?'Чудова робота, так тримати!':'Для зарахування потрібно 85%. Повтори матеріал і спробуй ще раз.'}</p>
+    <h1>${title}</h1><p>${text}</p>
     <div class="stats"><div class="stat"><b style="color:var(--g)">${r.correct}</b>правильно</div><div class="stat"><b style="color:#ff8e8e">${r.total-r.correct}</b>помилок</div><div class="stat"><b>${r.total}</b>усього</div></div></div>
     ${r.mistakes.length?'<h2 class="h2">Питання з помилками</h2>':''}
-    ${r.mistakes.map((m,k)=>`<div class="mist glass" style="--d:${k*50}ms"><div class="q">${esc(m.text)}</div>
+    ${r.mistakes.map((m,k)=>`<div class="mist glass" style="--d:${k*50}ms">${m.img?imgBox(m.id):''}<div class="q">${esc(m.text)}</div>
       <div class="bad">Твоя відповідь: ${m.selected>=0?esc(L[m.selected]+'. '+m.options[m.selected]):'— без відповіді'}</div></div>`).join('')}
-    <div class="nav"><button class="btn sec" id="rt">Пройти ще раз</button><button class="btn" id="ok">До категорій</button></div>`);
-  $('#ok').onclick = () => show('cats'); $('#rt').onclick = () => openCat(S.cat.id);
+    <div class="nav"><button class="btn sec" id="rt">Пройти ще раз</button><button class="btn" id="ok">${mix?'До вибору':'До категорій'}</button></div>`);
+  hydrate();
+  $('#ok').onclick = () => show(mix ? 'mix' : 'cats'); $('#rt').onclick = () => mix ? openMix(S.mixN) : openCat(S.cat.id);
   $('#tabs').hidden = true; if (r.passed) confetti();
 }
 
