@@ -161,11 +161,10 @@ async function submit() {
   V.innerHTML = `<div class="center" style="min-height:auto;padding-top:10px"><h1>${r.passed?'Категорію пройдено!':'Ще трохи — і зарахуємо'}</h1>
     <div class="ring"><svg width="150" height="150" viewBox="0 0 150 150"><circle cx="75" cy="75" r="62" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="10"/>
     <circle id="rg" cx="75" cy="75" r="62" fill="none" stroke="${col}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" style="transition:stroke-dashoffset 1s ease"/></svg><span>${r.percent}%</span></div>
-    <p>Правильно: <b>${r.correct}</b> з <b>${r.total}</b>. ${r.passed?'Чудова робота!':'Для зарахування потрібно 85%. Переглянь помилки та спробуй ще раз.'}</p></div>
-    ${r.mistakes.length?'<h2 style="font-size:15px;margin:14px 0 10px">Розбір помилок</h2>':''}
+    <p>Правильно: <b>${r.correct}</b> з <b>${r.total}</b>. ${r.passed?'Чудова робота!':'Для зарахування потрібно 85%. Повтори матеріал і спробуй ще раз.'}</p></div>
+    ${r.mistakes.length?'<h2 style="font-size:15px;margin:14px 0 10px">Питання з помилками</h2>':''}
     ${r.mistakes.map(m=>`<div class="mist glass"><div class="q">${esc(m.text)}</div>
-      <div class="bad">Твоя відповідь: ${m.selected>=0?esc(L[m.selected]+'. '+m.options[m.selected]):'— без відповіді'}</div>
-      <div class="good">Правильно: ${esc(L[m.correct]+'. '+m.options[m.correct])}</div></div>`).join('')}
+      <div class="bad">Твоя відповідь: ${m.selected>=0?esc(L[m.selected]+'. '+m.options[m.selected]):'— без відповіді'}</div></div>`).join('')}
     <div class="nav"><button class="btn sec" id="rt">Пройти ще раз</button><button class="btn" id="ok">До категорій</button></div>`;
   requestAnimationFrame(()=>requestAnimationFrame(()=>{ $('#rg').style.strokeDashoffset = C * (1 - r.percent/100); }));
   $('#ok').onclick = () => show('cats'); $('#rt').onclick = () => openCat(S.cat.id);
@@ -185,7 +184,7 @@ async function viewTop() {
 function viewMe() {
   const m = S.me, ini = m.name.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase(), pc = Math.round(m.passed * 100 / m.total);
   V.innerHTML = `<div class="prof glass"><div class="ava" style="${m.photo?`background-image:url('${esc(m.photo)}')`:''}">${m.photo?'':esc(ini)}</div>
-    <h1 style="font-size:19px">${esc(m.name)}</h1><div class="badge">#${esc(m.number)}</div></div>
+    <h1 style="font-size:19px">${esc(m.name)}</h1>${m.coach?'<div class="badge" style="font-size:20px">Я тренер</div>':`<div class="badge">#${esc(m.number)}</div>`}</div>
     <div class="glass" style="padding:18px"><div class="row" style="justify-content:space-between"><b>Освоєння правил</b><b class="num" style="color:var(--g)">${pc}%</b></div>
     <div class="bar" style="height:10px;margin-top:12px"><i data-w="${pc}"></i></div>
     <div class="meta"><span>Пройдено категорій</span><span><b style="color:var(--tx)">${m.passed}</b> з ${m.total}</span></div></div>`;
