@@ -151,7 +151,10 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:40}
 <canvas id="cf"></canvas>
 <script>
 // ===== ЄДИНА КОНСТАНТА: адреса FastAPI (публічний HTTPS-домен), без слеша в кінці =====
-const API_BASE_URL = "https://af8116e4.app.rubyhost.ru";
+const API_DEFAULT = "https://af8116e4.app.rubyhost.ru";
+// бот передає адресу Cloudflare-тунелю параметром ?api=… (приймаємо лише *.trycloudflare.com)
+const API_BASE_URL = (() => { try { const p = new URLSearchParams(location.search).get('api');
+  if (p && /^https:\/\/[a-z0-9-]+\.trycloudflare\.com$/.test(p)) return p; } catch (e) {} return API_DEFAULT; })();
 // ======================================================================================
 const tg = window.Telegram.WebApp; tg.ready(); tg.expand();
 try { tg.setHeaderColor('#0B0E14'); tg.setBackgroundColor('#0B0E14'); } catch (e) {}
@@ -217,7 +220,7 @@ function errHint(e) {
   if (m === '401') return 'Помилка 401: Telegram-підпис не пройшов. Закрий застосунок і відкрий його заново з бота (кнопка «Натисни»). Якщо не допомагає — перевір BOT_TOKEN у main.py.';
   if (m === '403') return 'Помилка 403: доступ обмежено.';
   if (/^\d+$/.test(m)) return `Помилка сервера ${m}. Перевір, що main.py запущений, а домен веде саме на API_PORT.`;
-  return 'Сервер не відповідає (мережа / CORS). Перевір, що main.py запущений, домен веде на API_PORT, а CORS_ORIGINS містить домен GitHub Pages.';
+  return 'Сервер не відповідає. Закрий застосунок і відкрий його заново кнопкою «Натисни» біля поля вводу (адреса сервера могла змінитись). Якщо не допомагає — тренеру: перевір, що main.py запущений.';
 }
 async function init() {
   skeleton();
