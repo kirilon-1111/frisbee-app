@@ -141,7 +141,6 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:40}
 .tmr.warn{color:var(--gold);background:rgba(255,196,0,.1);border-color:rgba(255,196,0,.35)}
 .tmr.crit{color:#ff8e8e;background:rgba(255,82,82,.12);border-color:rgba(255,82,82,.4);animation:pulse 1s infinite}
 @keyframes pulse{50%{opacity:.55}}
-#wm{position:fixed;inset:0;z-index:45;pointer-events:none;background-repeat:repeat}
 #shield{position:fixed;inset:0;z-index:100;background:#0B0E14;display:none;place-items:center;text-align:center;color:var(--mu);font:700 14px/1.5 Manrope;padding:30px}
 #shield.on{display:grid}
 @media print{body{display:none!important}}
@@ -160,7 +159,6 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:40}
 </nav>
 <div class="toast" id="toast"></div>
 <canvas id="cf"></canvas>
-<div id="wm"></div>
 <div id="shield"><div>Вміст прихований.<br>Торкнись екрана, щоб продовжити.</div></div>
 <script>
 // ===== ЄДИНА КОНСТАНТА: адреса FastAPI (публічний HTTPS-домен), без слеша в кінці =====
@@ -198,12 +196,6 @@ SH.onclick = shShow;
 document.addEventListener('keydown', e => { const k = (e.key || '').toLowerCase();
   if (k === 'printscreen' || ((e.ctrlKey || e.metaKey) && ['p','s','c'].includes(k)) || (e.metaKey && e.shiftKey && ['3','4','5'].includes(k))) {
     e.preventDefault(); shHide(); try { navigator.clipboard.writeText(''); } catch (_) {} setTimeout(shShow, 1500); } });
-// водяний знак з іменем і ID: якщо скриншот все ж злили, видно, чий він
-function setWM() { const u = (tg.initDataUnsafe && tg.initDataUnsafe.user) || {};
-  const t = esc(((S.me && S.me.name) || u.first_name || '') + ' · ' + (u.id || ''));
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='270' height='170'><text x='15' y='95' transform='rotate(-24 135 85)' font-family='sans-serif' font-size='15' font-weight='700' fill='rgba(255,255,255,0.07)'>${t}</text></svg>`;
-  $('#wm').style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`; }
-
 // ===== Таймер тесту: відлік за серверним часом, ресинхронізація при поверненні в застосунок =====
 const TM = { deadline: 0, iv: null };
 const fmt = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
@@ -272,7 +264,7 @@ async function init() {
   try { S.me = await api('/api/me'); }
   catch (e) { return lockScreen(IC.wifi, 'Немає зв’язку', 'Не вдалося з’єднатися із сервером. Натисни кнопку нижче, щоб спробувати ще раз.', esc(errHint(e)), true); }
   if (S.me.status !== 'confirmed') return lockScreen(IC.lock, 'Доступ обмежено', 'Очікуйте підтвердження вашої заявки тренером у боті.');
-  setWM(); show('cats');
+  show('cats');
 }
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => { if (b.dataset.t !== S.tab) hap(); show(b.dataset.t); });
 async function show(t) {
@@ -290,7 +282,7 @@ function viewCats() {
     <h2 class="h2" style="margin-top:4px">Категорії правил</h2>` + m.categories.map((c,k) => `
     <button class="cat glass ${c.passed?'done':''} ${c.locked&&!c.passed?'lockd':''}" style="--d:${60+k*35}ms" data-id="${c.id}">
       <div class="row"><div class="idx">${c.img?IC.img:c.id}</div><div class="cm"><div class="cname">${esc(c.name)}</div>
-        <div class="cs">${c.passed?'<em class="pill ok">Пройдено ✓</em>':c.locked?'<em class="pill r">Закрито</em>':c.active?'<em class="pill b">Триває</em>':c.total?`<em class="pill b">${c.percent}%</em>`:'<em class="pill n">Скоро</em>'}<span>${c.total} пит.${c.total?` · спроб ${c.left}/${c.max}`:''}</span></div></div>${CHEV}</div>
+        <div class="cs">${c.passed?'<em class="pill ok">Пройдено ✓</em>':c.locked?'<em class="pill r">Закрито</em>':c.active?'<em class="pill b">Триває</em>':c.total?`<em class="pill b">${c.percent}%</em>`:'<em class="pill n">Скоро</em>'}<span>${c.total} пит.${c.total&&c.max?` · спроб ${c.left}/${c.max}`:''}</span></div></div>${CHEV}</div>
       <div class="bar"><i data-w="${c.total?c.percent:0}"></i></div></button>`).join(''));
   V.querySelectorAll('.cat').forEach(b => b.onclick = () => { hap(); startCat(+b.dataset.id); });
 }
@@ -306,7 +298,8 @@ async function openCat(id) {
   S.cat = S.me.categories.find(c => c.id === id); S.i = 0; S.ans = {}; $('#tabs').hidden = true; skeleton();
   let d; try { d = await api('/api/category/' + id); }
   catch(e) { toast(String(e.message) === '403' ? 'Категорію закрито: спроби вичерпано' : 'Помилка завантаження'); return show('cats'); }
-  S.qs = d.questions; S.attempt = d.attempt || 0;
+  if (d.questions.length && typeof d.remaining !== 'number') { toast('Сервер ще зі старою версією — оновіть main.py і перезапустіть'); return show('cats'); }
+  S.qs = d.questions; S.attempt = d.attempt || 0; S.attNo = d.attempt_no; S.attMax = d.max;
   if (S.qs.length) {
     try { const sv = JSON.parse(localStorage.getItem('ans:' + S.attempt) || '{}'), ids = new Set(S.qs.map(q => q.id));
       Object.keys(sv).forEach(k => { if (ids.has(+k)) S.ans[k] = sv[k]; }); } catch(e) {}
@@ -345,7 +338,7 @@ async function openMix(n) {
 function viewQ() {
   const back = () => show(S.mode === 'mix' ? 'mix' : 'cats');
   const leave = () => S.mode === 'cat' && S.qs.length ? tg.showConfirm('Вийти з тесту? Таймер продовжує йти, а спроба вже використана. Поки є час, можна повернутись і продовжити.', ok => { if (ok) { stopTimer(); try { tg.disableClosingConfirmation(); } catch(e) {} back(); } }) : back();
-  const head = `<div class="top"><button class="bk" id="bk">${BACK}</button><div class="tt">${esc(S.cat.name)}</div>${S.mode==='cat'&&S.qs.length?`<div class="tmr" id="tm">${fmt(tLeft())}</div>`:''}${S.qs.length?`<div class="tk">${S.i+1}/${S.qs.length}</div>`:''}</div>`;
+  const head = `<div class="top"><button class="bk" id="bk">${BACK}</button><div class="tt">${esc(S.cat.name)}${S.mode==='cat'&&S.attNo?`<div style="font-weight:700;font-size:11px;color:var(--mu);margin-top:3px">Спроба ${S.attNo} з ${S.attMax}</div>`:''}</div>${S.mode==='cat'&&S.qs.length?`<div class="tmr" id="tm">${fmt(tLeft())}</div>`:''}${S.qs.length?`<div class="tk">${S.i+1}/${S.qs.length}</div>`:''}</div>`;
   if (!S.qs.length) {
     paint(head + `<div class="center"><div class="ico">${IC.clock}</div><h1>Питань ще немає</h1><p>У цій категорії ще немає питань. Тренер скоро їх додасть!</p></div>`);
     return $('#bk').onclick = back;
@@ -387,10 +380,10 @@ async function submit(auto=false) {
   if (!mix) { endAttempt(); const c = S.me.categories.find(x => x.id === S.cat.id); if (c) { c.left = r.left; c.locked = r.locked; c.active = false; c.attempts = r.attempts; if (r.category_passed) c.passed = true; } }
   const title = mix ? (r.passed ? 'Чудовий результат!' : 'Є над чим попрацювати') : (r.passed ? 'Категорію пройдено!' : 'Ще трохи — і зарахуємо');
   const text = mix ? 'Це тренування: прогрес категорій і топ не змінились.' : (r.late ? 'Час вийшов — відповіді не враховано.' : r.passed ? 'Чудова робота, так тримати!' : 'Для зарахування потрібно 85%. Повтори матеріал і спробуй ще раз.');
-  const note = mix ? '' : (r.locked && !r.category_passed ? '<p style="margin-top:10px;color:#ff8e8e;font-weight:700">Спроби закінчились: категорію закрито.</p>'
+  const note = mix || typeof r.left !== 'number' ? '' : (r.locked && !r.category_passed ? '<p style="margin-top:10px;color:#ff8e8e;font-weight:700">Спроби закінчились: категорію закрито.</p>'
     : `<p style="margin-top:10px">Залишилось спроб: <b style="color:var(--tx)">${r.left}</b> з ${r.max}</p>`)
     + (r.category_passed && !r.passed ? '<p style="margin-top:6px">Категорія вже зарахована раніше — збережено найкращий результат.</p>' : '');
-  const canRetry = mix || r.left > 0;
+  const canRetry = mix || !(r.left <= 0);
   paint(`<div class="res glass">${ring(r.percent, 150, 12)}
     <h1>${title}</h1><p>${text}</p>${note}
     <div class="stats"><div class="stat"><b style="color:var(--g)">${r.correct}</b>правильно</div><div class="stat"><b style="color:#ff8e8e">${r.total-r.correct}</b>помилок</div><div class="stat"><b>${r.total}</b>усього</div></div></div>
