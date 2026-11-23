@@ -175,7 +175,12 @@ const IC = {
 
 function toast(t){ const e=$('#toast'); e.textContent=t; e.classList.add('on'); setTimeout(()=>e.classList.remove('on'),2600); }
 async function api(path, opt={}) {
-  const r = await fetch(API_BASE_URL + path, { ...opt, headers: { 'Content-Type':'application/json', 'X-Init-Data': tg.initData } });
+  let r;
+  // GET-запити автоматично повторюються при збої мережі (до 4 спроб); POST — ні, щоб не дублювати відправку
+  for (let t = 0; ; t++) {
+    try { r = await fetch(API_BASE_URL + path, { ...opt, headers: { 'Content-Type':'application/json', 'X-Init-Data': tg.initData } }); break; }
+    catch (e) { if (opt.method === 'POST' || t >= 3) throw e; await new Promise(res => setTimeout(res, 700 * (t + 1))); }
+  }
   if (r.status === 429) { toast('Забагато запитів. Зачекай трохи.'); throw new Error('429'); }
   if (!r.ok) throw new Error(r.status);
   return r.json();
@@ -202,7 +207,7 @@ function paint(html, anim=true) { V.classList.remove('in'); V.innerHTML = html; 
     V.querySelectorAll('.rg').forEach(el => { const C = parseFloat(el.getAttribute('stroke-dasharray')); el.style.strokeDashoffset = C * (1 - el.dataset.p / 100); });
   })); }
 const skeleton = () => paint('<div class="skel"></div>'.repeat(5));
-const lockScreen = (e,t,p,small='') => { $('#tabs').hidden = true; paint(`<div class="center"><div class="ico">${e}</div><h1>${t}</h1><p>${p}</p>${small?`<small>${small}</small>`:''}</div>`); };
+const lockScreen = (e,t,p,small='',retry=false) => { $('#tabs').hidden = true; paint(`<div class="center"><div class="ico">${e}</div><h1>${t}</h1><p>${p}</p>${small?`<small>${small}</small>`:''}${retry?'<button class="btn" id="rtry" style="max-width:260px;margin-top:8px">Спробувати ще раз</button>':''}</div>`); if (retry) $('#rtry').onclick = () => { hap(); init(); }; };
 function ring(p, sz=96, sw=9) { const r=(sz-sw)/2, C=2*Math.PI*r, c=sz/2;
   return `<div class="ring" style="width:${sz}px;height:${sz}px"><svg width="${sz}" height="${sz}"><circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="${sw}"/>
   <circle class="rg" data-p="${p}" cx="${c}" cy="${c}" r="${r}" fill="none" stroke="url(#gg)" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" transform="rotate(-90 ${c} ${c})"/></svg><span>${p}%</span></div>`; }
@@ -217,7 +222,7 @@ function errHint(e) {
 async function init() {
   skeleton();
   try { S.me = await api('/api/me'); }
-  catch (e) { return lockScreen(IC.wifi, 'Немає зв’язку', 'Не вдалося з’єднатися із сервером. Спробуй відкрити застосунок ще раз трохи пізніше.', esc(errHint(e))); }
+  catch (e) { return lockScreen(IC.wifi, 'Немає зв’язку', 'Не вдалося з’єднатися із сервером. Натисни кнопку нижче, щоб спробувати ще раз.', esc(errHint(e)), true); }
   if (S.me.status !== 'confirmed') return lockScreen(IC.lock, 'Доступ обмежено', 'Очікуйте підтвердження вашої заявки тренером у боті.');
   show('cats');
 }
